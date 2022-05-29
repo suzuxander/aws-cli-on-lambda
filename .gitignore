@@ -1,3 +1,10 @@
+.idea
+dist
+template.yml
+venv
+lambda-layer-module
+bak
+
 # Logs
 logs
 *.log

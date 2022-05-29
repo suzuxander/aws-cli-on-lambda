@@ -1,0 +1,25 @@
+{
+  "name": "aws-cli-on-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "package": "sh script/awscli.sh && sh script/synth.sh && sh script/awscli.sh && sh script/package.sh",
+    "predeploy": "npm run package",
+    "deploy": "sh script/deploy.sh",
+    "test": "node dist/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suzuxander/aws-cli-on-lambda.git"
+  },
+  "author": "suzuxander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/suzuxander/aws-cli-on-lambda/issues"
+  },
+  "homepage": "https://github.com/suzuxander/aws-cli-on-lambda#readme",
+  "dependencies": {
+    "aws-cdk": "^2.25.0"
+  }
+}
