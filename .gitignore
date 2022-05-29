@@ -4,6 +4,7 @@ template.yml
 venv
 lambda-layer-module
 bak
+__pycache__
 
 # Logs
 logs
