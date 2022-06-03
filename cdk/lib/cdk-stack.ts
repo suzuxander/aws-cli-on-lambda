@@ -58,14 +58,29 @@ export class CdkStack extends Stack {
 
   public lambdaServiceRole = (id: string, options: {
     roleName: string,
-    policyName?: string,
-    functionName: string
+    policy?: { name?: string, statement: { effect: 'Allow' | 'Deny', action: string[], resource: string[] }[] },
   }): CfnRole => {
     const {
       roleName,
-      policyName,
-      functionName
+      policy
     } = options;
+
+    let policies: any[] = [];
+    if (policy) {
+      policies = [{
+        policyName: policy.name ?? 'policy',
+        policyDocument: {
+          Statement: policy.statement.map(st => (
+            {
+              Action: st.action,
+              Effect: st.effect,
+              Resource: st.resource
+            }
+          )),
+          Version: '2012-10-17'
+        }
+      }];
+    }
 
     return new CfnRole(this, id, {
       roleName,
@@ -79,23 +94,7 @@ export class CdkStack extends Stack {
         }],
         Version: '2012-10-17'
       },
-      policies: [{
-        policyName: policyName ?? 'policy',
-        policyDocument: {
-          Statement: [
-            {
-              Action: [
-                'lambda:*'
-              ],
-              Effect: 'Allow',
-              Resource: [
-                'arn:aws:lambda:ap-northeast-1:*:function:' + functionName
-              ]
-            },
-          ],
-          Version: '2012-10-17'
-        }
-      }]
+      policies
     });
   };
 }

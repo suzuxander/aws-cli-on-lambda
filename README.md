@@ -8,15 +8,14 @@ aws-cliを実行するためにPythonが必要になるため、Lambda関数の�
 
 ## 前提
 以下はインストール済みとする。
-- Python3
-- NodeJS
+- Python 3.6くらい
+- NodeJS 16くらい
 
 ## 使用方法
 コマンドラインからデプロイを実行する。
 ```bash
 # アーティファクトを配置するS3バケットを環境変数に設定する
-$ ARTIFACT_BUCKET={ARTIFACT_BUCKET}
-$ export ARTIFACT_BUCKET
+$ export ARTIFACT_BUCKET={ARTIFACT_BUCKET}
 
 # デプロイ実行
 $ npm run deploy
@@ -40,3 +39,17 @@ Request ID
 
 ## Lambda Layerの設定
 必要なことは[ここ](./script/awscli.sh)でやっている。
+```bash
+$ mkdir temp
+$ python3 -m venv temp
+$ cd temp
+$ source bin/activate
+$ pip install awscli
+$ sed -i.bak "1s/.*/\#\!\/var\/lang\/bin\/python/" bin/aws
+$ deactivate
+$ cd ../
+
+$ mkdir lambda-layer-module
+$ cp ./temp/bin/aws lambda-layer-module/
+$ cp -r ./temp/lib/python3.7/site-packages/* lambda-layer-module/
+```

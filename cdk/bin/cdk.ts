@@ -15,8 +15,7 @@ const layer = stack.lambdaLayer('LambdaLayer', {
 });
 
 const role = stack.lambdaServiceRole('LambdaFunctionServiceRole', {
-  roleName: 'sample-aws-cli-on-lambda-layer-role',
-  functionName: 'sample-aws-cli-on-lambda-function'
+  roleName: 'sample-aws-cli-on-lambda-layer-role'
 });
 
 stack.lambdaFunction('LambdaFunction', {
