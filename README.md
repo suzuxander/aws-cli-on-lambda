@@ -1,4 +1,4 @@
-# aws-cli-on-lambda
+# aws-cli-on-lambda-sample
 ## 概要
 LambdaLayerを利用して、aws-cliをLambda関数から実行するプロジェクトのサンプル。  
 aws-sdkでは実装されていない機能を実行するために用いる想定。  
