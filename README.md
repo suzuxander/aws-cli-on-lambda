@@ -12,6 +12,7 @@ aws-cliを実行するためにPythonが必要になるため、Lambda関数の�
 - NodeJS 16くらい
 
 ## 使用方法
+### デプロイ
 コマンドラインからデプロイを実行する。
 ```bash
 # アーティファクトを配置するS3バケットを環境変数に設定する
@@ -21,6 +22,9 @@ $ export ARTIFACT_BUCKET={ARTIFACT_BUCKET}
 $ npm run deploy
 ```
 デプロイが正常終了したらLambda関数が生成されている。  
+CloudFormationのマネジメントコンソールなどから確認する。
+
+### Lambda関数実行
 マネジメントコンソールからLambda関数をテスト実行し、以下のように結果が表示されればOK。  
 ```
 Test Event Name
@@ -38,7 +42,8 @@ Request ID
 適宜Lambda関数のロジックを修正してLambda関数からaws-cliを実行する。
 
 ## Lambda Layerの設定
-必要なことは[ここ](./script/awscli.sh)でやっている。
+必要なことは[ここ](./script/awscli.sh)でやっている。  
+awscliをインストールして、実行に必要なモジュールと一緒にパッケージングする。
 ```bash
 $ mkdir temp
 $ python3 -m venv temp

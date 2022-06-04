@@ -1,18 +1,13 @@
-import { CfnFunction, CfnLayerVersion } from '@aws-cdk/aws-sam';
-import { Construct, Stack, StackProps } from '@aws-cdk/core';
-import { Runtime } from '@aws-cdk/aws-lambda';
-import { CfnRole } from '@aws-cdk/aws-iam';
+import { Construct } from 'constructs';
+import { CfnFunction, CfnLayerVersion } from 'aws-cdk-lib/aws-sam';
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { CfnRole } from 'aws-cdk-lib/aws-iam';
 
 export class CdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
   }
 
   public lambdaLayer = (id: string, options: { layerName?: string, contentUri: string }): CfnLayerVersion => {
