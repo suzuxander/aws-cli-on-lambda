@@ -27,7 +27,7 @@ export class CdkStack extends Stack {
     layers?: string[],
     timeout?: number,
     memorySize?: number,
-  }) => {
+  }): CfnFunction => {
     const {
       codeUri,
       handler,

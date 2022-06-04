@@ -1,28 +1,28 @@
-# aws-cli setup
-rm -rf temp
-rm -rf lambda-layer-module
-
-mkdir temp
-python3 -m venv temp
-cd temp
-source bin/activate
-pip install awscli
-sed -i.bak "1s/.*/\#\!\/var\/lang\/bin\/python/" bin/aws
-deactivate
-cd ../
-
-mkdir lambda-layer-module
-cp ./temp/bin/aws lambda-layer-module/
-cp -r ./temp/lib/python3.7/site-packages/* lambda-layer-module/
-
-rm -rf temp
-
-# create template
-cd cdk
-npm i
-npm run build
-npm run synth
-cd ..
+## aws-cli setup
+#rm -rf temp
+#rm -rf lambda-layer-module
+#
+#mkdir temp
+#python3 -m venv temp
+#cd temp
+#source bin/activate
+#pip install awscli
+#sed -i.bak "1s/.*/\#\!\/var\/lang\/bin\/python/" bin/aws
+#deactivate
+#cd ../
+#
+#mkdir lambda-layer-module
+#cp ./temp/bin/aws lambda-layer-module/
+#cp -r ./temp/lib/python3.7/site-packages/* lambda-layer-module/
+#
+#rm -rf temp
+#
+## create template
+#cd cdk
+#npm i
+#npm run build
+#npm run synth
+#cd ..
 
 # cloudformation deploy
 STACK_NAME=aws-cli-on-lambda-sample

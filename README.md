@@ -20,6 +20,12 @@ $ export ARTIFACT_BUCKET={ARTIFACT_BUCKET}
 
 # デプロイ実行
 $ npm run deploy
+
+...省略
+
+Waiting for changeset to be created..
+Waiting for stack create/update to complete
+Successfully created/updated stack - aws-cli-on-lambda-sample
 ```
 デプロイが正常終了したらLambda関数が生成されている。  
 CloudFormationのマネジメントコンソールなどから確認する。
@@ -39,9 +45,9 @@ Function Logs
 Request ID
 ...
 ```
-適宜Lambda関数のロジックを修正してLambda関数からaws-cliを実行する。
 
-## Lambda Layerの設定
+## Lambda Layer
+### モジュールのパッケージング
 必要なことは[ここ](./script/awscli.sh)でやっている。  
 awscliをインストールして、実行に必要なモジュールと一緒にパッケージングする。
 ```bash
@@ -57,4 +63,14 @@ $ cd ../
 $ mkdir lambda-layer-module
 $ cp ./temp/bin/aws lambda-layer-module/
 $ cp -r ./temp/lib/python3.7/site-packages/* lambda-layer-module/
+```
+### aws-cliの実行方法
+以下のようにしてaws-cliを実行する。実際のコードは[こちら](./lambda/src/index.py)。
+```python
+import subprocess
+
+def handler(event, context):
+    result = subprocess.run(['/opt/aws', '--version'], stdout=subprocess.PIPE)
+    return result.stdout.decode()
+
 ```
