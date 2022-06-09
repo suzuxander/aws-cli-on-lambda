@@ -1,8 +1,9 @@
 import { Construct } from 'constructs';
 import { CfnFunction, CfnLayerVersion } from 'aws-cdk-lib/aws-sam';
-import { Stack, StackProps } from 'aws-cdk-lib';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { CfnRole } from 'aws-cdk-lib/aws-iam';
+import { Duration, Stack, StackProps } from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { AwsCliLayer } from 'aws-cdk-lib/lambda-layer-awscli';
 
 export class CdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -22,7 +23,6 @@ export class CdkStack extends Stack {
     codeUri: string,
     handler: string,
     role: string,
-    runtime: Runtime,
     functionName?: string,
     layers?: string[],
     timeout?: number,
@@ -34,7 +34,6 @@ export class CdkStack extends Stack {
       role,
       functionName,
       layers,
-      runtime,
       timeout,
       memorySize,
     } = options;
@@ -45,7 +44,7 @@ export class CdkStack extends Stack {
       role,
       functionName,
       layers,
-      runtime: runtime.toString(),
+      runtime: lambda.Runtime.PYTHON_3_7.toString(),
       timeout,
       memorySize,
     })
@@ -54,7 +53,7 @@ export class CdkStack extends Stack {
   public lambdaServiceRole = (id: string, options: {
     roleName: string,
     policy?: { name?: string, statement: { effect: 'Allow' | 'Deny', action: string[], resource: string[] }[] },
-  }): CfnRole => {
+  }): iam.CfnRole => {
     const {
       roleName,
       policy
@@ -77,7 +76,7 @@ export class CdkStack extends Stack {
       }];
     }
 
-    return new CfnRole(this, id, {
+    return new iam.CfnRole(this, id, {
       roleName,
       assumeRolePolicyDocument: {
         Statement: [{
@@ -90,6 +89,63 @@ export class CdkStack extends Stack {
         Version: '2012-10-17'
       },
       policies
+    });
+  };
+
+  public lambdaLayerV2 = (id: string, options?: {}): AwsCliLayer => {
+    return new AwsCliLayer(this, id);
+  }
+
+  public lambdaFunctionV2 = (id: string, options: {
+    codePath: string,
+    handler: string,
+    role: iam.IRole,
+    functionName?: string,
+    layers?: lambda.ILayerVersion[],
+    timeout?: number,
+    memorySize?: number,
+  }): lambda.Function => {
+    const {
+      codePath,
+      handler,
+      role,
+      functionName,
+      layers,
+      timeout,
+      memorySize,
+    } = options;
+
+    return new lambda.Function(this, id, {
+      code: lambda.Code.fromAsset(codePath),
+      handler,
+      role,
+      functionName,
+      layers,
+      runtime: lambda.Runtime.PYTHON_3_7,
+      timeout: timeout ? Duration.seconds(timeout) : undefined,
+      memorySize,
+    })
+  };
+
+  public lambdaServiceRoleV2 = (id: string, options: {
+    roleName: string,
+  }): iam.IRole => {
+    const {
+      roleName,
+    } = options;
+
+    return new iam.Role(this, id, {
+      roleName,
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com', ),
+      inlinePolicies: {
+        'policy': new iam.PolicyDocument({
+          statements: [new iam.PolicyStatement({
+            actions: [ 'logs:*' ],
+            effect: iam.Effect.ALLOW,
+            resources: [ '*' ]
+          })]
+        })
+      }
     });
   };
 }

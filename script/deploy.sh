@@ -17,23 +17,22 @@
 #
 #rm -rf temp
 #
-## create template
-#cd cdk
-#npm i
-#npm run build
-#npm run synth
-#cd ..
+# create template
+cd cdk
+npm i
+npm run build
+npm run deploy
 
 # cloudformation deploy
-STACK_NAME=aws-cli-on-lambda-sample
+#STACK_NAME=aws-cli-on-lambda-sample
 
-aws cloudformation package \
-  --template-file cdk/cdk.out/${STACK_NAME}.template.json \
-  --s3-bucket ${ARTIFACT_BUCKET} \
-  --s3-prefix ${STACK_NAME} \
-  --output-template-file template.yml
-
-aws cloudformation deploy \
-  --stack-name ${STACK_NAME} \
-  --template-file template.yml \
-  --capabilities CAPABILITY_NAMED_IAM
+#aws cloudformation package \
+#  --template-file cdk/cdk.out/${STACK_NAME}.template.json \
+#  --s3-bucket ${ARTIFACT_BUCKET} \
+#  --s3-prefix ${STACK_NAME} \
+#  --output-template-file template.yml
+#
+#aws cloudformation deploy \
+#  --stack-name ${STACK_NAME} \
+#  --template-file template.yml \
+#  --capabilities CAPABILITY_NAMED_IAM
